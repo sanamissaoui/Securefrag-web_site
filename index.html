@@ -1,0 +1,55 @@
+http://googleusercontent.com/immersive_entry_chip/0
+
+
+---
+
+### Explication des Modifications :
+
+1.  **Fonction `authenticate_and_reconstruct` :**
+    * La section complète de décodage Base64 et de déchiffrement AES (les deux derniers `try-except` de votre code précédent) a été **retirée**.
+    * À la place, après la concaténation de `frag1_data + frag2_data + frag3_data` en `encrypted_b64_full`, cette chaîne est directement incluse dans le dictionnaire `display_data` sous la clé `'concatenated_b64'`.
+    * La fonction retourne maintenant ce dictionnaire `display_data` et le code de statut 200 si la récupération et la concaténation réussissent.
+
+2.  **Route `/reconstruct` :**
+    * Elle reste similaire mais s'attend à recevoir le dictionnaire `display_data` en cas de succès et le passe directement au template `rec.html`.
+
+### Mise à Jour de `rec.html` :
+
+Pour afficher la chaîne concaténée, votre fichier `rec.html` doit être mis à jour pour chercher la nouvelle clé `'concatenated_b64'`. Voici un exemple :
+
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultat de la Reconstruction (Test)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Résultat de la Reconstruction des Données</h1>
+        {% if data %}
+            <div class="success-message">
+                <h2>Fragments Récupérés et Concaténés !</h2>
+                <p><strong>Message:</strong> {{ data.message }}</p>
+                <p><strong>ID Utilisateur:</strong> {{ data.user_id }}</p>
+                <p><strong>Partie Ciblée 1:</strong> {{ data.target_part1 }}</p>
+                <p><strong>Données Concaténées (Base64):</strong></p>
+                <textarea readonly style="width: 100%; height: 200px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: monospace;">{{ data.concatenated_b64 }}</textarea>
+            </div>
+        {% elif error %}
+            <div class="error-message">
+                <h2>Erreur lors de la Récupération des Fragments</h2>
+                <p><strong>Détails de l'erreur:</strong> {{ error }}</p>
+            </div>
+        {% else %}
+            <div class="info-message">
+                <p>Aucun résultat à afficher. Veuillez retourner à la page d'accueil pour tenter une reconstruction.</p>
+            </div>
+        {% endif %}
+        <br>
+        <a href="/" class="button">Retour à l'accueil</a>
+    </div>
+</body>
+</html>

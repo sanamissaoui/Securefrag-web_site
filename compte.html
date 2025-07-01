@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestion du compte - Paramètres</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #ffffff; /* fond blanc */
+      color: #1E3A8A; /* texte bleu foncé */
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background-color: #1E3A8A; /* bleu foncé */
+      color: white;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    nav a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #64ffda;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+      padding: 60px 40px;
+    }
+
+    .card {
+      background: #ffffff; /* fond carte blanc */
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      width: 400px;
+      text-align: center;
+      border: 1px solid #1E3A8A30; /* légère bordure bleue */
+    }
+
+    h1, h2 {
+      font-size: 20px;
+      color: #1E3A8A; /* texte principal */
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      background: #1E3A8A;
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s;
+      margin-bottom: 15px;
+    }
+
+    button:hover {
+      background-color: #2f54b6;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #1E3A8A;
+      color: white;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">SecureFrag</div>
+    <nav>
+      <a href="/acc">Accueil</a>
+      <a href="/account-settings">Gestion du compte</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card" id="account-settings">
+      <h1>Paramètres du compte</h1>
+      <button onclick="window.location.href='/change-password'">Modifier mot de passe</button>
+      <button onclick="window.location.href='/edit-account'">Modifier votre compte</button>
+      <button onclick="window.location.href='/deactivate-account'">Désactiver votre compte</button>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 SecureFrag. Tous droits réservés.
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Accès sécurisé - SecureFrag</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #1d3b8b;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .container h2 {
+            color: #1d3b8b;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            color: #1d3b8b;
+            font-weight: bold;
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #1d3b8b;
+            border-radius: 8px;
+        }
+        button {
+            background-color: #1d3b8b;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            color: #1d3b8b;
+            font-weight: bold;
+        }
+        footer {
+            background-color: #1d3b8b;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>SecureFrag</h1>
+    <nav>
+        <a href="/acc" style="color: white; text-decoration: none; margin-right: 15px;">Accueil</a>
+        <a href="#" style="color: white; text-decoration: none;">Gestion du compte</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>Accès sécurisé</h2>
+    <form id="passwordForm">
+        <label for="password">Entrez votre mot de passe</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Valider</button>
+    </form>
+    <div id="result"></div>
+</div>
+
+<footer>
+    © 2025 SecureFrag. Tous droits réservés.
+</footer>
+
+<script>
+    document.getElementById('passwordForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevents default form submission
+        const password = document.getElementById('password').value;
+
+        fetch('/reconstruct', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ password: password })
+        })
+        .then(response => response.json())  // Ajoute ceci
+        .then(data => {
+            const resultDiv = document.getElementById('result');
+            if (data.message) {
+                resultDiv.innerHTML = `<strong style="color: green;">Succès :</strong> ${data.message}`;
+            } else if (data.error) {
+                resultDiv.innerHTML = `<strong style="color: red;">Erreur :</strong> ${data.error}`;
+            } else {
+                resultDiv.innerHTML = "Réponse inattendue du serveur.";
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la requête:', error);
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerText = "Une erreur est survenue.";
+            resultDiv.style.color = 'red';
+        });
+
+    });
+</script>
+
+</body>
+</html>

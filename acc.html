@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure Data Fragmentation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="logo">SecureFrag</div>
+    <nav>
+      <button onclick="loginFace()" class="btn btn-secondary">Login</button>
+      <a href="/signup" class="btn btn-secondary">Sign Up</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero-text">
+      <h1>Fragmenter. Sécuriser. Contrôler.</h1>
+      <p>Votre solution de fragmentation et de protection des données sensibles basée sur le cloud.</p>
+      <div class="buttons">
+        <button onclick="loginFace()" class="btn btn-secondary">Login</button>
+        <a href="/signup" class="btn btn-secondary">Sign Up</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="{{ url_for('static', filename='Images/logo.png') }}" alt="Logo SecureFrag" />
+    </div>
+  </main>
+
+  <footer>
+    © 2025 SecureFrag. Tous droits réservés.
+  </footer>
+
+  <script>
+    async function loginFace() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        await video.play();
+
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const imageData = canvas.toDataURL('image/jpeg');
+
+        stream.getTracks().forEach(track => track.stop());
+
+        const response = await fetch('/login_face', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image_data: imageData })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+  alert("✅ Login réussi. Bienvenue, " + result.message + "!");
+  window.location.href = '/accd?user=' + encodeURIComponent(result.message); // Redirection vers la route Flask
+} else {
+  alert("❌ " + result.message);
+}
+      } catch (err) {
+        console.error("Erreur de connexion : ", err);
+        alert("Erreur pendant la détection du visage.");
+      }
+    }
+  </script>
+</body>
+</html>

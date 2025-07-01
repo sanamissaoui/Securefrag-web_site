@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connexion à la base de données</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: white;
+      color: #1E3A8A;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background-color: #1E3A8A;
+      color: white;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    nav a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #C0CCF7;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+      padding: 60px 40px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);
+      padding: 30px;
+      width: 400px;
+    }
+
+    h1, h2 {
+      font-size: 20px;
+      color: #1E3A8A;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    label {
+      font-size: 14px;
+      color: #1E3A8A;
+      margin: 10px 0 5px;
+      display: block;
+    }
+
+    input {
+      padding: 10px;
+      width: 100%;
+      border: 1px solid #1E3A8A;
+      border-radius: 8px;
+      outline: none;
+      margin-bottom: 10px;
+      transition: 0.3s;
+      color: #1E3A8A;
+    }
+
+    input:focus {
+      border-color: #1E3A8A;
+      box-shadow: 0 0 5px #1E3A8A;
+    }
+
+    button {
+      width: 100%;
+      background: #1E3A8A;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #162e6b;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 10px;
+      border: 2px solid #1E3A8A;
+      margin-top: 15px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #1E3A8A;
+      color: white;
+      margin-top: 40px;
+    }
+
+    .btn-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .btn-container button {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">SecureFrag</div>
+    <nav>
+      <a href="#connect">Connexion</a>
+      <a href="#face">Reconnaissance Faciale</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card" id="connect">
+      <h1>Connexion à la base de données</h1>
+      <form action="/connect_db" method="POST">
+        <label for="dbHost">Nom de l'hôte :</label>
+        <input type="text" id="dbHost" name="host" placeholder="localhost" required>
+
+        <label for="dbUsername">Nom d'utilisateur :</label>
+        <input type="text" id="dbUsername" name="user" required>
+
+        <label for="dbPassword">Mot de passe :</label>
+        <input type="password" id="dbPassword" name="password" required>
+
+        <label for="dbName">Nom de la base de données :</label>
+        <input type="text" id="dbName" name="database" required>
+        <input type="hidden" name="action" value="register">
+
+        <button type="submit">Se connecter</button>
+      </form>
+    </div>
+
+    <div class="card" id="face">
+      <h2>Capture de visage pour la reconnaissance faciale</h2>
+      <input id="username" placeholder="Nom..." />
+      <video id="video" autoplay></video>
+      <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+
+      <div class="btn-container">
+        <button onclick="capture('capturer')">Capturer</button>
+        <button onclick="capture('enregistrer')">S’enregistrer</button>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 SecureFrag. Tous droits réservés.
+  </footer>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+
+    function startCamera() {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          video.srcObject = stream;
+        })
+        .catch(err => {
+          alert("Erreur d'accès à la caméra: " + err);
+        });
+    }
+
+    startCamera();
+
+    function capture(action) {
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+
+  const imageData = canvas.toDataURL('image/png');
+  const name = document.getElementById('username').value;
+
+  if (!name) return alert("Veuillez entrer votre nom.");
+
+  fetch('/face', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: name, image_data: imageData, action: action })
+  })
+  .then(res => {
+    if (res.redirected) {
+      // Redirection to accd.html (or whatever the server returns)
+      window.location.href = res.url;
+    } else {
+      return res.text().then(data => {
+        // If it's a normal text response (like an error), show it in an alert
+        alert(data);
+      });
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Image enregistrée avec succès.");
+  });
+}
+
+  </script>
+
+</body>
+</html>

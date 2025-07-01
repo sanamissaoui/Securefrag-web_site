@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestion du compte</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #ffffff;
+      color: #1E3A8A;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background-color: #1E3A8A;
+      color: white;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    nav a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #A5B4FC;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh;
+      padding: 60px 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.1);
+      padding: 40px;
+      width: 600px;
+      text-align: center;
+      border: 1px solid #1E3A8A20;
+    }
+
+    h1 {
+      font-size: 26px;
+      color: #1E3A8A;
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      background: #1E3A8A;
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      margin-bottom: 20px;
+    }
+
+    button:hover {
+      background-color: #3B5CCC;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #1E3A8A;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">SecureFrag</div>
+    <nav>
+      <a href="/acc.html">Accueil</a>
+      <a href="compte.html">Gestion du compte</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card" id="manage">
+      <h1>Bienvenue, {{ user }}</h1>
+      <h1>Gestion de votre compte</h1>
+      <button onclick="window.location.href='/acceder'">Accéder à vos données</button>
+      <button onclick="window.location.href='/edit-data'">Modifier vos données</button>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 SecureFrag. Tous droits réservés.
+  </footer>
+
+</body>
+</html>
